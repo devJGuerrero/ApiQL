@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class GueApiQLResource
- * @package DevJG\GueApiQL
+ * @package DevJG\ApiQL
  */
 abstract class GueApiQLResource extends JsonResource
 {
