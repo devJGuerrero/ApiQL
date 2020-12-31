@@ -3,7 +3,7 @@
     "description": "Utilities to create API in laravel",
     "type": "library",
     "require": {
-        "php": "^7.2",
+        "php": "^7.4",
         "laravel/framework": "^8.0"
     },
     "autoload": {
