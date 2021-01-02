@@ -11,8 +11,8 @@ interface Base
     /**
      * En: Build the resource requested by the client
      * Es: Construir el recurso solicitado por el cliente
-     * @param array $fields
+     * @param array $payload
      * @return array
      */
-    public function builder(array $fields): array;
+    public function builder(array $payload): array;
 }

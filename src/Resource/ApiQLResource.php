@@ -16,44 +16,48 @@ abstract class ApiQLResource extends JsonResource implements Base
     /**
      * En: Build the resource requested by the client
      * Es: Construir el recurso solicitado por el cliente
-     * @param array $fields
+     * @param array $payload
      * @return array
      */
-    public function builder(array $fields): array
+    public function builder(array $payload): array
     {
         $collector    = [];
         $clientFields = $this->obtainNamesRequestFieldsClient();
         if ($this->isNotEmptyFieldsClient($clientFields)) {
-            foreach ($clientFields as $field => $value) {
-                if (array_key_exists($field, $fields) and ($value === true or is_array($value) or is_object($value))) {
-                    $collector[$field] = $this->extractFieldData($value, $fields[$field]);
-                }
-            }
+            array_walk($clientFields, function($displayFields, $field) use (&$collector, $payload) {
+                array_key_exists($field, $payload)
+                and ($displayFields === true or is_array($displayFields) or is_object($displayFields))
+                    ? $collector[$field] = $this->extractFieldData($displayFields, $payload[$field])
+                    : false;
+            });
             return $collector;
-        } else {
-            return $fields;
         }
+        return $payload;
     }
 
     /**
      * En: Extract the data from the fields to the data model
      * Es: Extraer los datos de los campos al modelo de datos
-     * @param $value
+     * @param $displayFields
      * @param array $payload
      * @return array|mixed
      * @noinspection PhpMissingReturnTypeInspection
      */
-    private function extractFieldData($value, $payload = array())
+    private function extractFieldData($displayFields, $payload = array())
     {
-        if ($value === true or is_object($payload)) return $payload;
-        if (count($value) >= 1) {
-            $item = [];
-            foreach ($value as $key => $content) {
-                if (array_key_exists($key, $payload) and ($content === true or is_array($content))) {
-                    $item[$key] = $this->extractFieldData($content, $payload[$key]);
-                }
-            }
-            return $item;
+        if ($displayFields === true) return $payload;
+        if (!empty($displayFields)) {
+            $collector = [];
+            /** @noinspection PhpUndefinedMethodInspection */
+            $records   = $payload->toArray(resolve(Request::class));
+            array_walk($records, function($items, $key) use (&$collector, $displayFields) {
+                array_walk($displayFields, function($display, $field) use (&$collector, $items, $key) {
+                    array_key_exists($field, $items) and ($display === true or is_array($display))
+                        ? $collector[$key][$field] = $this->extractFieldData($display, $items[$field])
+                        : false;
+                });
+            });
+            return $collector;
         }
         return [];
     }
