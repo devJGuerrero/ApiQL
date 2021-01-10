@@ -14,6 +14,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 abstract class ApiQLResource extends JsonResource implements Base
 {
     /**
+     * En: It contains the information of the http application
+     * Es: Contiene la información de la solicitud http
+     * @var Request
+     */
+    private Request $request;
+
+    /**
      * En: Build the resource requested by the client
      * Es: Construir el recurso solicitado por el cliente
      * @param array $payload
@@ -21,8 +28,9 @@ abstract class ApiQLResource extends JsonResource implements Base
      */
     public function builder(array $payload): array
     {
-        $collector    = [];
-        $clientFields = $this->getFieldsClient();
+        $collector     = [];
+        $this->request = resolve(Request::class);
+        $clientFields  = $this->getFieldsClient();
         if ($this->isNotEmptyFieldsClient($clientFields)) {
             array_walk($clientFields, function($displayFields, $field) use (&$collector, $payload) {
                 array_key_exists($field, $payload)
@@ -49,7 +57,7 @@ abstract class ApiQLResource extends JsonResource implements Base
         if (!empty($displayFields)) {
             $collector = [];
             /** @noinspection PhpUndefinedMethodInspection */
-            $records   = $payload->toArray(resolve(Request::class));
+            $records   = $payload->toArray($this->request);
             array_walk($records, function($items, $key) use (&$collector, $displayFields) {
                 array_walk($displayFields, function($display, $field) use (&$collector, $items, $key) {
                     array_key_exists($field, $items) and ($display === true or is_array($display))
@@ -79,7 +87,7 @@ abstract class ApiQLResource extends JsonResource implements Base
      */
     private function getFieldsClient(): array {
         $model  = strtolower(class_basename($this->resource));
-        $fields = resolve(Request::class)->get("fields") ?? [];
+        $fields = $this->request->get("fields") ?? [];
         return  Arr::exists($fields, $model)
             ? $fields[$model] === true
                 ? []
