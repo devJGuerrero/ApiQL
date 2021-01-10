@@ -28,6 +28,7 @@ abstract class ApiQLResource extends JsonResource implements Base
      */
     public function builder(array $payload): array
     {
+        if (!session()->has("isBuilding")) { session()->put("isBuilding", true); } else { return $payload; }
         $collector     = [];
         $this->request = resolve(Request::class);
         $clientFields  = $this->getFieldsClient();
@@ -38,9 +39,9 @@ abstract class ApiQLResource extends JsonResource implements Base
                     ? $collector[$field] = $this->extractFieldData($displayFields, $payload[$field])
                     : false;
             });
-            return $collector;
+            session()->remove("isBuilding"); return $collector;
         }
-        return $payload;
+        session()->remove("isBuilding");     return $payload;
     }
 
     /**
@@ -53,16 +54,21 @@ abstract class ApiQLResource extends JsonResource implements Base
      */
     private function extractFieldData($displayFields, $payload = array())
     {
-        if ($displayFields === true) return $payload;
-        if (!empty($displayFields)) {
+        if ($displayFields === true and !is_object($payload))    return $payload;
+        if ($displayFields === true and is_object($payload))     return $payload->toArray($this->request);
+        if (!empty($displayFields)  and is_array($displayFields) and is_object($payload)) {
             $collector = [];
-            /** @noinspection PhpUndefinedMethodInspection */
             $records   = $payload->toArray($this->request);
             array_walk($records, function($items, $key) use (&$collector, $displayFields) {
                 array_walk($displayFields, function($display, $field) use (&$collector, $items, $key) {
-                    array_key_exists($field, $items) and ($display === true or is_array($display))
-                        ? $collector[$key][$field] = $this->extractFieldData($display, $items[$field])
-                        : false;
+                    if (array_key_exists($field, $items) and $display === true and !is_object($items[$field])) {
+                        $collector[$key][$field] = $items[$field];
+                    } else if (array_key_exists($field, $items) and $display === true and is_object($items[$field])) {
+                        $collector[$key][$field] = $items[$field]->toArray($this->request);
+                    }
+                    else if (array_key_exists($field, $items) and is_array($display) and is_object($items[$field])) {
+                        $collector[$key][$field] = $this->extractFieldData($display, $items[$field]);
+                    }
                 });
             });
             return $collector;
@@ -76,9 +82,7 @@ abstract class ApiQLResource extends JsonResource implements Base
      * @param array $client
      * @return bool
      */
-    private function isNotEmptyFieldsClient(array $client): bool {
-        return count($client) >= 1;
-    }
+    private function isNotEmptyFieldsClient(array $client): bool { return count($client) >= 1; }
 
     /**
      * En: Obtain field names requested by the client
