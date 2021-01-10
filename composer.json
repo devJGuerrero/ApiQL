@@ -18,5 +18,12 @@
             "email": "jose.guerrero.carrizo@gmail.com"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DevJG\\ApiQL\\Providers\\ApiQLServiceProvider"
+            ]
+        }
+    }
 }

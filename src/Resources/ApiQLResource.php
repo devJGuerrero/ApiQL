@@ -1,10 +1,10 @@
 <?php
 
-namespace DevJG\ApiQL\Resource;
+namespace DevJG\ApiQL\Resources;
 
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-use DevJG\ApiQL\Contracts\Resource\Base;
+use DevJG\ApiQL\Contracts\Resources\Base;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -22,7 +22,7 @@ abstract class ApiQLResource extends JsonResource implements Base
     public function builder(array $payload): array
     {
         $collector    = [];
-        $clientFields = $this->obtainNamesRequestFieldsClient();
+        $clientFields = $this->getFieldsClient();
         if ($this->isNotEmptyFieldsClient($clientFields)) {
             array_walk($clientFields, function($displayFields, $field) use (&$collector, $payload) {
                 array_key_exists($field, $payload)
@@ -77,7 +77,7 @@ abstract class ApiQLResource extends JsonResource implements Base
      * Es: Obtener nombres de campos solicitados por el cliente
      * @return array
      */
-    private function obtainNamesRequestFieldsClient(): array {
+    private function getFieldsClient(): array {
         $model  = strtolower(class_basename($this->resource));
         $fields = resolve(Request::class)->get("fields") ?? [];
         return  Arr::exists($fields, $model)

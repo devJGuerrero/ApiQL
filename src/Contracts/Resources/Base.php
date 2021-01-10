@@ -1,6 +1,6 @@
 <?php
 
-namespace DevJG\ApiQL\Contracts\Resource;
+namespace DevJG\ApiQL\Contracts\Resources;
 
 /**
  * Interface Base
