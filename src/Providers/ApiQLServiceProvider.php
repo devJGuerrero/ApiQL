@@ -15,20 +15,10 @@ class ApiQLServiceProvider extends ServiceProvider
      * Es: Bootstrap cualquier servicio de aplicación
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
             __DIR__ . "/../configs/apiql.php" => config_path("apiql.php")
         ]);
-    }
-
-    /**
-     * En: Register any application services
-     * Es: Registrar cualquier servicio de solicitud
-     * @return void
-     */
-    public function register()
-    {
-
     }
 }
