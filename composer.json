@@ -2,23 +2,23 @@
     "name": "devjg/apiql",
     "description": "Utilities to create API in laravel",
     "type": "library",
-    "require": {
-        "php": "^7.4",
-        "laravel/framework": "^8.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "DevJG\\ApiQL\\": "src"
-        }
-    },
     "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "José Guerrero",
             "email": "jose.guerrero.carrizo@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "DevJG\\ApiQL\\": "src"
+        }
+    },
+    "require": {
+        "php": "^7.4",
+        "laravel/framework": "^8.0"
+    },
     "extra": {
         "laravel": {
             "providers": [
