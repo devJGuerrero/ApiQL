@@ -103,14 +103,15 @@ abstract class ApiQLResource extends JsonResource implements Base
     /**
      * En: Build the resource requested by the client
      * Es: Construir el recurso solicitado por el cliente
+     * @param Request $request
      * @param array $payload
      * @return array
      */
-    public function builder(array $payload): array
+    public function builder(Request $request, array $payload): array
     {
         if ($this->isBuildingPreviousResource()) return $payload;
         $collector     = [];
-        $this->request = resolve(Request::class);
+        $this->request = $request;
         $clientFields  = $this->getFieldsClient();
         if ($this->isNotEmptyFieldsClient($clientFields)) {
             array_walk($clientFields, function($displayFields, $field) use (&$collector, $payload) {
