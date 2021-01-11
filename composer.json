@@ -10,14 +10,14 @@
             "email": "jose.guerrero.carrizo@gmail.com"
         }
     ],
+    "require": {
+        "php": "^7.4",
+        "laravel/framework": "^8.0"
+    },
     "autoload": {
         "psr-4": {
             "DevJG\\ApiQL\\": "src"
         }
-    },
-    "require": {
-        "php": "^7.4",
-        "laravel/framework": "^8.0"
     },
     "extra": {
         "laravel": {
