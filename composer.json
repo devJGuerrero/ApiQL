@@ -19,11 +19,20 @@
             "DevJG\\ApiQL\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "DevJG\\ApiQL\\Tests\\": "tests"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
                 "DevJG\\ApiQL\\Providers\\ApiQLServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "9.5"
     }
 }
