@@ -1,13 +1,13 @@
 <?php
 
-namespace DevJG\ApiQL\Tests;
+namespace Tests;
 
 use DevJG\ApiQL\Providers\ApiQLServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 /**
  * Class TestCase
- * @package DevJG\ApiQL\Tests
+ * @package Tests
  */
 class TestCase extends BaseTestCase
 {
@@ -19,6 +19,9 @@ class TestCase extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->loadMigrationsFrom(__DIR__ ."/tests/database/migrations");
+        $this->artisan("migrate", ["--database" => "testbench"])->run();
+        $this->withFactories(__DIR__."/tests/database/factories");
     }
 
     /**
@@ -40,5 +43,12 @@ class TestCase extends BaseTestCase
      * @param $app
      * @return void
      */
-    protected function getEnvironmentSetUp($app): void {}
+    protected function getEnvironmentSetUp($app): void {
+        $app["config"]->set("database.default", "testbench");
+        $app["config"]->set("database.connections.testbench", [
+            "driver"   => "sqlite",
+            "database" => ":memory:",
+            "prefix"   => "",
+        ]);
+    }
 }

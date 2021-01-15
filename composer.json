@@ -17,16 +17,17 @@
     "require-dev": {
         "orchestra/testbench": "^6.0",
         "phpunit/phpunit": "9.5",
-        "vimeo/psalm": "4.x-dev"
+        "vimeo/psalm": "4.x-dev",
+        "laravel/legacy-factories": "^1.0.4"
     },
     "autoload": {
         "psr-4": {
-            "DevJG\\ApiQL\\": "src"
+            "DevJG\\ApiQL\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "DevJG\\ApiQL\\Tests\\": "tests"
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
