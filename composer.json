@@ -16,7 +16,8 @@
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
-        "phpunit/phpunit": "9.5"
+        "phpunit/phpunit": "9.5",
+        "vimeo/psalm": "4.x-dev"
     },
     "autoload": {
         "psr-4": {
@@ -29,7 +30,9 @@
         }
     },
     "scripts": {
-        "test": "\"vendor/bin/phpunit\" --colors=always"
+        "test": "\"vendor/bin/phpunit\" --colors=always",
+        "psalm": "\"vendor/bin/psalm\"",
+        "psalm-show-info": "\"vendor/bin/psalm\" --show-info=true"
     },
     "extra": {
         "laravel": {
