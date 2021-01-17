@@ -3,16 +3,16 @@
 namespace Tests\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Tests\Database\Factories\CountryFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Tests\Database\Factories\DepartmentFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * Class Country
+ * Class Department
  * @package Tests\Models
  */
-class Country extends Model
+class Department extends Model
 {
     use HasFactory;
 
@@ -22,17 +22,17 @@ class Country extends Model
      * @var string[]
      */
     protected array $fillable = [
-        "id", "name"
+        "id", "name", "country_id"
     ];
 
     /**
-     * En: One-to-Many Relationship with Departments
-     * Es: Relación uno a muchos con departamentos
-     * @return HasMany
+     * En: One-to-one relationship with countries
+     * Es: Relación uno a uno con países
+     * @return BelongsTo
      */
-    public function departments(): HasMany
+    public function country(): BelongsTo
     {
-        return $this->hasMany(Department::class);
+        return $this->belongsTo(Country::class);
     }
 
     /**
@@ -42,6 +42,6 @@ class Country extends Model
      */
     protected static function newFactory(): Factory
     {
-        return CountryFactory::new();
+        return DepartmentFactory::new();
     }
 }

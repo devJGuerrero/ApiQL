@@ -3,6 +3,7 @@
 namespace Tests\Database\Seeds;
 
 use Tests\Models\Country;
+use Tests\Models\Department;
 use Illuminate\Database\Seeder;
 
 /**
@@ -18,6 +19,9 @@ class CountrySeeder extends Seeder
      */
     public function run(): void
     {
-        Country::factory()->count(5)->create();
+        Country::factory()
+            ->has(Department::factory()->count(2))
+            ->count(3)
+            ->create();
     }
 }

@@ -26,7 +26,17 @@ class ResourcesTest extends TestCase
             ->assertHeader("Content-type", "application/json")
             ->assertJsonStructure([
                 "data" => [
-                    ["id", "name", "createdAt", "updatedAt"]
+                    "*" => [
+                        "id",
+                        "name",
+                        "departments" => [
+                            "*" => [
+                                "id", "name", "createdAt", "updatedAt"
+                            ]
+                        ],
+                        "createdAt",
+                        "updatedAt"
+                    ]
                 ]
             ]);
     }
@@ -40,10 +50,11 @@ class ResourcesTest extends TestCase
     {
         $response = $this->call("GET", "api/countries", [
             "fields" => [
-                "id"        => true,
-                "name"      => true,
-                "createdAt" => false,
-                "updatedAt" => false
+                "id"          => true,
+                "name"        => true,
+                "departments" => false,
+                "createdAt"   => false,
+                "updatedAt"   => false
             ]
         ]);
         $response
@@ -52,6 +63,35 @@ class ResourcesTest extends TestCase
             ->assertJsonStructure([
                 "data" => [
                     ["id", "name"]
+                ]
+            ]);
+    }
+
+    /**
+     * En: Request only id, name, departments fields
+     * Es: Solicitar solo campos id, nombre, departamentos
+     * @return void
+     */
+    public function test_request_only_id_name_departments_fields(): void
+    {
+        $response = $this->call("GET", "api/countries", [
+            "fields" => [
+                "id"          => true,
+                "name"        => true,
+                "departments" => [
+                    "id"   => true,
+                    "name" => true
+                ],
+                "createdAt"   => false,
+                "updatedAt"   => false
+            ]
+        ]);
+        $response
+            ->assertOk()
+            ->assertHeader("Content-type", "application/json")
+            ->assertJsonStructure([
+                "data" => [
+                    ["id", "name", "departments"]
                 ]
             ]);
     }

@@ -5,15 +5,14 @@ namespace Tests\Http\Resources;
 use DevJG\ApiQL\Resources\ApiQLResource;
 
 /**
- * Class CountryResource
+ * Class DepartmentResource
  * @property mixed id
  * @property mixed name
- * @property mixed departments
  * @property mixed created_at
  * @property mixed updated_at
  * @package Tests\Http\Resources
  */
-class CountryResource extends ApiQLResource
+class DepartmentResource extends ApiQLResource
 {
     /**
      * En: Transform the resource into an array
@@ -26,7 +25,6 @@ class CountryResource extends ApiQLResource
         return $this->builder($request, [
             "id"          => $this->id,
             "name"        => $this->name,
-            "departments" => DepartmentResource::collection($this->departments),
             "createdAt"   => $this->created_at->format('d-m-Y H:i:s'),
             "updatedAt"   => $this->updated_at->format('d-m-Y H:i:s')
         ]);
