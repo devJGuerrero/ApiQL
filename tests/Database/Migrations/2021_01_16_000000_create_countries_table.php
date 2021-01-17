@@ -1,16 +1,13 @@
 <?php
 
-namespace Tests\Database\Migrations;
-
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateCountriesTestTable
- * @package Tests\Database\Migrations
+ * Class CreateCountriesTable
  */
-class CreateCountriesTestTable extends Migration
+class CreateCountriesTable extends Migration
 {
     /**
      * En: Run the migrations

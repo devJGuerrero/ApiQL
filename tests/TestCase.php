@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use Tests\Database\Seeds\DatabaseSeeder;
+use Tests\Providers\ApiQLTestServiceProvider;
 use DevJG\ApiQL\Providers\ApiQLServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
@@ -19,9 +21,11 @@ class TestCase extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->loadMigrationsFrom(__DIR__ ."/tests/database/migrations");
-        $this->artisan("migrate", ["--database" => "testbench"])->run();
         $this->withFactories(__DIR__."/tests/database/factories");
+        $this->artisan("migrate", ["--database" => "testbench"])->run();
+        $this->seed(
+            DatabaseSeeder::class
+        );
     }
 
     /**
@@ -33,7 +37,8 @@ class TestCase extends BaseTestCase
     protected function getPackageProviders($app): array
     {
         return [
-            ApiQLServiceProvider::class
+            ApiQLServiceProvider::class,
+            ApiQLTestServiceProvider::class
         ];
     }
 

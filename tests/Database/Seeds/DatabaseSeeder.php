@@ -2,14 +2,13 @@
 
 namespace Tests\Database\Seeds;
 
-use Tests\Models\Country;
 use Illuminate\Database\Seeder;
 
 /**
- * Class CountrySeeder
+ * Class DatabaseSeeder
  * @package Tests\Database\Seeds
  */
-class CountrySeeder extends Seeder
+class DatabaseSeeder extends Seeder
 {
     /**
      * En: Seed the application's database
@@ -18,6 +17,8 @@ class CountrySeeder extends Seeder
      */
     public function run(): void
     {
-        Country::factory()->count(5)->create();
+        $this->call([
+            CountrySeeder::class
+        ]);
     }
 }
